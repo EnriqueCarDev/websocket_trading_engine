@@ -21,4 +21,20 @@ public:
       : id_{id}, price_{price}, side_{side}, type_{type},
         initial_quantity_{initial_quantity},
         remaining_quantity_{initial_quantity} {}
+
+  Id getId() const { return id_; }
+  Price getPrice() const { return price_; }
+  Side getSide() const { return side_; }
+  OrderType getType() const { return type_; }
+  Quantity getInitialQuantity() const { return initial_quantity_; }
+  Quantity getRemainingQuantity() const { return remaining_quantity_; }
+
+  bool isFilled() const { return remaining_quantity_ == 0; }
+
+  void fillOrder(Quantity quantity) {
+    if (quantity > remaining_quantity_)
+      throw std::logic_error("Quantity is superior to remaining quantity");
+
+    remaining_quantity_ -= quantity;
+  }
 };
