@@ -1,37 +1,34 @@
+#pragma once
+
+#include "./enums.hpp"
+#include "./types.hpp"
 #include <vector>
 
-enum class Side { BUY, SELL };
-enum class OrderType { FillAndKill, GoodTillCancel, GoodForDay };
-
-using Price = std::uint32_t;
-using Quantity = std::uint32_t;
-using Id = std::uint64_t;
-
 class Order {
-  Id id_;
-  Price price_;
-  Side side_;
-  OrderType type_;
-  Quantity initial_quantity_;
-  Quantity remaining_quantity_;
+  trading::Id id_;
+  trading::Price price_;
+  trading::Side side_;
+  trading::OrderType type_;
+  trading::Quantity initial_quantity_;
+  trading::Quantity remaining_quantity_;
 
 public:
-  Order(Id id, Price price, Side side, OrderType type,
-        Quantity initial_quantity)
+  Order(trading::Id id, trading::Price price, trading::Side side,
+        trading::OrderType type, trading::Quantity initial_quantity)
       : id_{id}, price_{price}, side_{side}, type_{type},
         initial_quantity_{initial_quantity},
         remaining_quantity_{initial_quantity} {}
 
-  Id getId() const { return id_; }
-  Price getPrice() const { return price_; }
-  Side getSide() const { return side_; }
-  OrderType getType() const { return type_; }
-  Quantity getInitialQuantity() const { return initial_quantity_; }
-  Quantity getRemainingQuantity() const { return remaining_quantity_; }
+  trading::Id getId() const { return id_; }
+  trading::Price getPrice() const { return price_; }
+  trading::Side getSide() const { return side_; }
+  trading::OrderType getType() const { return type_; }
+  trading::Quantity getInitialQuantity() const { return initial_quantity_; }
+  trading::Quantity getRemainingQuantity() const { return remaining_quantity_; }
 
   bool isFilled() const { return remaining_quantity_ == 0; }
 
-  void fillOrder(Quantity quantity) {
+  void fillOrder(trading::Quantity quantity) {
     if (quantity > remaining_quantity_)
       throw std::logic_error("Quantity is superior to remaining quantity");
 

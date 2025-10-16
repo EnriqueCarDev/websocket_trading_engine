@@ -9,10 +9,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
 # Find Boost with required components
-find_package(Boost REQUIRED COMPONENTS system thread)
-find_package(OpenSSL REQUIRED)
+# find_package(Boost REQUIRED COMPONENTS system thread)
+# find_package(OpenSSL REQUIRED)
 
-link_directories(${OPENSSL_LIBRARIES})
+# link_directories(${OPENSSL_LIBRARIES})
 
 # Main executable
 add_executable(trading_engine
@@ -20,16 +20,8 @@ add_executable(trading_engine
 )
 
 # Include directories
-target_include_directories(trading_engine PRIVATE
-    include
-    ${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR}
-)
+target_include_directories(trading_engine PRIVATE)
 
 # Link Boost and pthread
-target_link_libraries(trading_engine PRIVATE
-    Boost::system
-    Boost::thread
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    pthread
-)
+# target_link_libraries(main PRIVATE Boost::filesystem Boost::system)
+
