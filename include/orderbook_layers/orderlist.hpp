@@ -30,4 +30,42 @@ public:
     Iterator(Node *node) : current(node) {}
     Node *current;
   };
+
+  void pushBack(Order *const order) {
+    auto node = &order->node;
+    node->order = order;
+    if (head == nullptr) {
+      head = node;
+      tail = node;
+    } else {
+      node->prev = tail;
+      tail->next = node;
+      tail = node;
+    }
+  }
+
+  void remove(Order *const order) {
+    if (order->node.order == nullptr)
+      throw std::runtime_error("node does not contain an order on removal");
+    auto node = &order->node;
+    order->node.order = nullptr;
+    if (head == node) {
+      head = node->next;
+    }
+    if (tail == node) {
+      tail = node->prev;
+    }
+
+    if (node->prev) {
+      node->prev->next = node->next;
+    }
+
+    if (node->next) {
+      node->next->prev = node->prev;
+    }
+  }
+
+  Order *front() const { return head == nullptr ? nullptr : head->order; }
+  Iterator begin() const { return Iterator(head); }
+  Iterator end() const { return Iterator(nullptr); }
 };
