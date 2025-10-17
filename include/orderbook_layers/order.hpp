@@ -1,11 +1,26 @@
 #pragma once
 
-#include "./types.hpp"
 #include <vector>
 
+class OrderList;
+class Order;
+
+class Node {
+  friend class OrderList;
+  friend class Order;
+  Node *prev = nullptr;
+  Node *next = nullptr;
+  Order *order = nullptr;
+};
+
 class Order {
+public:
   enum Side { BUY, SELL };
   enum OrderType { FillAndKill, GoodTillCancel, GoodForDay };
+
+private:
+  Order *next = nullptr;
+  Node node;
   std::string id_;
   std::uint32_t price_;
   std::uint32_t avgPrice_ = 0;
@@ -14,6 +29,16 @@ class Order {
   std::uint32_t initial_quantity_;
   std::uint32_t remaining_quantity_;
   std::uint32_t cumQty_ = 0;
+
+  void fillOrder(std::uint32_t quantity) {
+    if (quantity > remaining_quantity_)
+      throw std::logic_error("Quantity is superior to remaining quantity");
+
+    remaining_quantity_ -= quantity;
+    avgPrice_ =
+        (avgPrice_ * cumQty_) + (price_ * quantity) / (cumQty_ + quantity);
+    cumQty_ += quantity;
+  }
 
 public:
   Order(std::string id, std::uint32_t price, Side side, OrderType type,
@@ -32,13 +57,4 @@ public:
   }
 
   bool isFilled() const { return remaining_quantity_ == 0; }
-
-  void fillOrder(std::uint32_t quantity) {
-    if (quantity > remaining_quantity_)
-      throw std::logic_error("Quantity is superior to remaining quantity");
-
-    remaining_quantity_ -= quantity;
-    avgPrice_ =
-        (avgPrice_ * cumQty_) + (price_ * quantity_) / (cumQty + quantity);
-  }
 };

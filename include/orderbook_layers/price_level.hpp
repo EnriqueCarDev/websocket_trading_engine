@@ -1,6 +1,8 @@
 #pragma once
 
-#include "./orderlist.hpp"
+#include "order.hpp"
+#include "orderlist.hpp"
+#include <algorithm>
 #include <concepts>
 
 struct PriceCompare {
@@ -18,4 +20,15 @@ concept ContainerOfStruct = requires(Container c) {
   requires(std::same_as<typename Container::value_type, OrderList>);
 };
 
-class PriceLevel {};
+template <typename ContainerOfStruct> class PriceLevel {
+  const PriceCompare compFn;
+  ContainerOfStruct levels;
+
+public:
+  PriceLevel(bool ascending) : compFn(ascending) {}
+  void insertOrder(Order *order) {
+    auto it = std::lower_bound(levels.begin(), levels.end(),
+                               order -> getPrice(), compFn)
+
+  };
+};
