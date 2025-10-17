@@ -43,12 +43,13 @@ private:
   }
 
 public:
-  Order(std::string id, std::uint32_t price, Side side, OrderType type,
-        std::uint32_t initial_quantity)
-      : id_{id}, price_{price}, side_{side}, type_{type},
-        initial_quantity_{initial_quantity},
+  Order(long exchangeId, std::string id, std::uint32_t price, Side side,
+        OrderType type, std::uint32_t initial_quantity)
+      : exchangeId_{exchangeId}, id_{id}, price_{price}, side_{side},
+        type_{type}, initial_quantity_{initial_quantity},
         remaining_quantity_{initial_quantity} {}
 
+  const long exchangeId_;
   const std::string &getId() const { return id_; }
   const std::uint32_t &getPrice() const { return price_; }
   const Side &getSide() const { return side_; }
