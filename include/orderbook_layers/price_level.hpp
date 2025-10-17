@@ -27,8 +27,36 @@ template <typename ContainerOfStruct> class PriceLevel {
 public:
   PriceLevel(bool ascending) : compFn(ascending) {}
   void insertOrder(Order *order) {
-    auto it = std::lower_bound(levels.begin(), levels.end(),
-                               order -> getPrice(), compFn)
-
+    auto it = std::lower_bound(levels.begin(), levels.end(), order->getPrice(),
+                               compFn);
+    if (it == levels.end() || it->getPrice() != order->getPrice()) {
+      OrderList list(order->getPrice());
+      list.pushBack(order);
+      levels.insert(it, std::move(list));
+    } else {
+      it->pushBack(order);
+    }
   };
+
+  void removeOrder(Order *order) {
+    auto it = std::lower_bound(levels.begin(), levels.end(), order->getPrice(),
+                               compFn);
+    if (it == levels.end() || it->getPrice() != order->getPrice())
+      throw new std::runtime_error("Price level for order does not exist");
+
+    it->remove(order);
+
+    if (it->front() == nullptr)
+      levels.erase(it);
+  }
+
+  Order *front() const {
+    auto it = levels.begin();
+    if (it == levels.end())
+      return nullptr;
+    return it->front();
+  }
+
+  bool empty() const { return levels.empty(); }
+  int size() const { return levels.size() };
 };
