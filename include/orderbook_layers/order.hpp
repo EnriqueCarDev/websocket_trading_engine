@@ -18,6 +18,8 @@ public:
   enum Side { BUY, SELL };
   enum OrderType { FillAndKill, GoodTillCancel, GoodForDay };
 
+  friend class OrderList;
+
 private:
   Order *next = nullptr;
   Node node;
