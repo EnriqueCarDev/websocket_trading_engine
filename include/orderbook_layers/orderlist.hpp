@@ -12,11 +12,11 @@ public:
   const std::int32_t getPrice() const { return price_; }
   struct Iterator {
     friend class OrderList;
-    using iteratorCategory = std::forward_iterator_tag;
-    using differenceType = std::ptrdiff_t;
-    using valueType = Order *;
-    using reference = valueType &;
-    valueType operator*() const { return current->order; }
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = Order *;
+    using reference = value_type &;
+    value_type operator*() const { return current->order; }
     Iterator &operator++() {
       current = current->next;
       return *this;
