@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
-#include "./types.hpp"
-#include "price_level.hpp"
+#include "pricelevels.hpp"
 
 struct Trade {
    friend class Orderbook;
@@ -32,10 +31,10 @@ class Book {
 };
 
 class OrderBook {
-   PriceLevel<std::vector<OrderList>> bids_ =
-       PriceLevel<std::vector<OrderList>>(false);
-   PriceLevel<std::vector<OrderList>> asks_ =
-       PriceLevel<std::vector<OrderList>>(true);
+   PriceLevels<std::vector<OrderList>> bids_ =
+       PriceLevels<std::vector<OrderList>>(false);
+   PriceLevels<std::vector<OrderList>> asks_ =
+       PriceLevels<std::vector<OrderList>>(true);
    OrderBookListener& listener_;
    void matchOrders(Order::Side side);
 

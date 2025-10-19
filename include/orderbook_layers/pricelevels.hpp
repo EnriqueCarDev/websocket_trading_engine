@@ -21,12 +21,12 @@ concept ContainerOfStruct = requires(Container c) {
 };
 
 template <typename ContainerOfStruct>
-class PriceLevel {
+class PriceLevels {
    const PriceCompare compFn;
    ContainerOfStruct levels;
 
   public:
-   PriceLevel(bool ascending) : compFn(ascending) {}
+   PriceLevels(bool ascending) : compFn(ascending) {}
    void insertOrder(Order* order) {
       auto it = std::lower_bound(levels.begin(), levels.end(),
                                  order->getPrice(), compFn);
