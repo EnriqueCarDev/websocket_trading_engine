@@ -33,9 +33,11 @@ struct BookLevel {
    std::uint32_t quantity;
 };
 
-class Book {
+struct Book {
    std::vector<BookLevel> bids_;
+   std::vector<long> bidOrderIds;
    std::vector<BookLevel> asks_;
+   std::vector<long> askOrderIds;
 };
 
 struct QuoteOrders {
@@ -72,6 +74,8 @@ class OrderBook {
 
   public:
    OrderBook(OrderBookListener& listener) : listener_(listener) {}
+
+   const Book book();
 
    void insertOrder(Order* order);
    void cancelOrder(Order* order);

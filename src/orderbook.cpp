@@ -112,7 +112,11 @@ const Book OrderBook::book() {
          }
          bookLevels.emplace_back(BookLevel{orders->getPrice(), quantity});
       };
+      priceLevels.forEach(cumSum);
    };
    book.bids_.reserve(bids_.size());
    book.asks_.reserve(asks_.size());
+   fillBook(bids_, book.bids_, book.bidOrderIds);
+   fillBook(asks_, book.asks_, book.askOrderIds);
+   return book;
 }
