@@ -14,7 +14,7 @@ class Node {
    Order* order = nullptr;
 };
 
-class Order {
+struct Order {
   public:
    enum Side { BUY, SELL };
    enum OrderType { FillAndKill, GoodTillCancel, GoodForDay };
@@ -32,6 +32,7 @@ class Order {
    OrderType type_;
    std::uint32_t initial_quantity_;
    std::uint32_t remaining_quantity_;
+   std::uint32_t filled_;
    std::uint32_t cumQty_ = 0;
 
    void fillOrder(std::uint32_t quantity) {
@@ -39,6 +40,7 @@ class Order {
          throw std::logic_error("Quantity is superior to remaining quantity");
 
       remaining_quantity_ -= quantity;
+      filled_ += quantity;
       avgPrice_ =
           (avgPrice_ * cumQty_) + (price_ * quantity) / (cumQty_ + quantity);
       cumQty_ += quantity;
@@ -67,6 +69,17 @@ class Order {
    const std::uint32_t& getRemainingQuantity() const {
       return remaining_quantity_;
    }
+   bool isOnList() const { return node.order != nullptr; }
 
-   bool isFilled() const { return remaining_quantity_ == 0; }
+   bool isFilled() const {
+      return remaining_quantity_ == 0 && filled_ == initial_quantity_;
+   }
+
+   bool isCancelled() const {
+      return remaining_quantity_ == 0 && filled_ != initial_quantity_;
+   }
+
+   bool isPartiallyFilled() const {
+      return remaining_quantity_ == 0 && filled_ > 0;
+   }
 };
