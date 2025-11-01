@@ -85,3 +85,15 @@ void OrderBook::quote(const QuoteOrders& quotes, std::uint32_t bidPrice,
       matchOrders(Order::SELL);
    }
 }
+
+QuoteOrders OrderBook::getQuotes(const std::string& sessionId,
+                                 const std::string& quoteId,
+                                 std::function<QuoteOrders()> createOrders) {
+   auto key = SessionQuoteId(sessionId, quoteId);
+   auto it = quotes_.find(key);
+   if (it == quotes_.end()) {
+      return quotes_[key] = createOrders();
+   } else {
+      return it->second;
+   }
+}
