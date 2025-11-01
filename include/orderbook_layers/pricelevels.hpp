@@ -56,6 +56,12 @@ class PriceLevels {
       return it->front();
    }
 
+   void forEach(std::function<void(const OrderList*)> fn) const {
+      for (auto it = levels.begin(); it != levels.end(); ++it) {
+         fn(&(*it));
+      }
+   }
+
    bool empty() const { return levels.empty(); }
    int size() const { return levels.size(); };
 };

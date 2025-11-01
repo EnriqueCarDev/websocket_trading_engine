@@ -8,11 +8,11 @@ class OrderList {
   private:
    Node* head = nullptr;
    Node* tail = nullptr;
-   std::int32_t price_;
+   std::uint32_t price_;
 
   public:
-   OrderList(std::int32_t price) : price_{price} {}
-   const std::int32_t getPrice() const { return price_; }
+   OrderList(std::uint32_t price) : price_{price} {}
+   const std::uint32_t getPrice() const { return price_; }
    struct Iterator {
       friend class OrderList;
       using iterator_category = std::forward_iterator_tag;

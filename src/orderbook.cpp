@@ -89,11 +89,34 @@ void OrderBook::quote(const QuoteOrders& quotes, std::uint32_t bidPrice,
 QuoteOrders OrderBook::getQuotes(const std::string& sessionId,
                                  const std::string& quoteId,
                                  std::function<QuoteOrders()> createOrders) {
-   auto key = SessionQuoteId(sessionId, quoteId);
+   SessionQuoteId key = SessionQuoteId(sessionId, quoteId);
    auto it = quotes_.find(key);
    if (it == quotes_.end()) {
       return quotes_[key] = createOrders();
    } else {
       return it->second;
    }
+}
+
+const Book OrderBook::book() {
+   Book book;
+
+   auto fillBook = [](const PriceLevels<std::vector<OrderList>>& priceLevels,
+                      std::vector<BookLevel>& bookLevels,
+                      std::vector<long>& orderIds) {
+      auto cumSum = [&](const OrderList* orders) {
+         std::uint32_t quantity(0);
+         for (auto it = orders->begin(); it != orders->end(); ++it) {
+            quantity = quantity + (*it)->remaining_quantity_;
+            orderIds.push_back((*it)->exchangeId_);
+         }
+         bookLevels.emplace_back(BookLevel{orders->getPrice(), quantity});
+      };
+      priceLevels.forEach(cumSum);
+   };
+   book.bids_.reserve(bids_.size());
+   book.asks_.reserve(asks_.size());
+   fillBook(bids_, book.bids_, book.bidOrderIds);
+   fillBook(asks_, book.asks_, book.askOrderIds);
+   return book;
 }
