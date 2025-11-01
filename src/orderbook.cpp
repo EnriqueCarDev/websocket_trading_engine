@@ -58,3 +58,30 @@ void OrderBook::cancelOrder(Order* order) {
       asks_.removeOrder(order);
    }
 }
+
+void OrderBook::quote(const QuoteOrders& quotes, std::uint32_t bidPrice,
+                      std::uint32_t bidQuantity, std::uint32_t askPrice,
+                      std::uint32_t askQuantity) {
+   Order* bid = quotes.bid_;
+   Order* ask = quotes.ask_;
+
+   if (bid->isOnList()) bids_.removeOrder(bid);
+   if (ask->isOnList()) asks_.removeOrder(ask);
+
+   if (bid->remaining_quantity_ != 0) {
+      bid->price_ = bidPrice;
+      bid->initial_quantity_ = bidQuantity;
+      bid->remaining_quantity_ = bidQuantity;
+      bid->filled_ = 0;
+      bids_.insertOrder(bid);
+      matchOrders(Order::BUY);
+   }
+   if (ask->remaining_quantity_ != 0) {
+      ask->price_ = askPrice;
+      ask->initial_quantity_ = askQuantity;
+      ask->remaining_quantity_ = askQuantity;
+      ask->filled_ = 0;
+      asks_.insertOrder(ask);
+      matchOrders(Order::SELL);
+   }
+}

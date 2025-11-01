@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <map>
 #include <vector>
 #include "pricelevels.hpp"
@@ -37,12 +38,12 @@ class Book {
    std::vector<BookLevel> asks_;
 };
 
-class QuoteOrders {
+struct QuoteOrders {
    Order* bid_;
    Order* ask_;
 };
 
-class SessionQuoteId {
+struct SessionQuoteId {
    const std::string sessionId_;
    const std::string quoteId_;
 
