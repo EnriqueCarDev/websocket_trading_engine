@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <vector>
 #include "pricelevels.hpp"
 
@@ -36,12 +37,36 @@ class Book {
    std::vector<BookLevel> asks_;
 };
 
+class QuoteOrders {
+   Order* bid_;
+   Order* ask_;
+};
+
+class SessionQuoteId {
+   const std::string sessionId_;
+   const std::string quoteId_;
+
+   SessionQuoteId(const std::string sessionId, const std::string_view quoteId)
+       : sessionId_(sessionId), quoteId_(quoteId) {}
+
+   bool operator==(const SessionQuoteId& other) const {
+      return sessionId_ == other.sessionId_ && quoteId_ == other.quoteId_;
+   }
+
+   bool operator<(const SessionQuoteId& other) const {
+      return sessionId_ < other.sessionId_ ||
+             (sessionId_ == other.sessionId_ && quoteId_ < other.quoteId_);
+   }
+};
+
 class OrderBook {
    PriceLevels<std::vector<OrderList>> bids_ =
        PriceLevels<std::vector<OrderList>>(false);
    PriceLevels<std::vector<OrderList>> asks_ =
        PriceLevels<std::vector<OrderList>>(true);
    OrderBookListener& listener_;
+   std::map<SessionQuoteId, QuoteOrders> quotes_;
+
    void matchOrders(Order::Side side);
 
   public:
