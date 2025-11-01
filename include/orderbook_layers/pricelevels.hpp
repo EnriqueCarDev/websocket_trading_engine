@@ -10,7 +10,7 @@ struct PriceCompare {
    explicit PriceCompare(bool ascending) : ascending_(ascending) {}
    template <typename T, typename U>
    inline bool operator()(const T& t, const U& u) const {
-      return (ascending_) ? t.price() < u : t.price() > u;
+      return (ascending_) ? t.getPrice() < u : t.getPrice() > u;
    }
 };
 
@@ -57,5 +57,5 @@ class PriceLevels {
    }
 
    bool empty() const { return levels.empty(); }
-   int size() const { return levels.size() };
+   int size() const { return levels.size(); };
 };

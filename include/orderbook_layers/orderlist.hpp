@@ -3,6 +3,8 @@
 #include "order.hpp"
 
 class OrderList {
+   friend class OrderBook;
+
   private:
    Node* head = nullptr;
    Node* tail = nullptr;

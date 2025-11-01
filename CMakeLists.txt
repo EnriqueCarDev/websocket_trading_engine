@@ -16,6 +16,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Main executable
 add_executable(trading_engine
     src/main.cpp
+    src/orderbook.cpp
 )
 
 # Include directories

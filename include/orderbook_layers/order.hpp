@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cfloat>
 #include <vector>
 
 class OrderList;
@@ -19,6 +20,7 @@ class Order {
    enum OrderType { FillAndKill, GoodTillCancel, GoodForDay };
 
    friend class OrderList;
+   friend class OrderBook;
 
   private:
    Order* next = nullptr;
@@ -41,6 +43,9 @@ class Order {
           (avgPrice_ * cumQty_) + (price_ * quantity) / (cumQty_ + quantity);
       cumQty_ += quantity;
    }
+
+   void cancel() { remaining_quantity_ = 0; }
+   bool isMarket() { return price_ == DBL_MAX || price_ == -DBL_MAX; }
 
   public:
    Order(long exchangeId, std::string id, std::uint32_t price, Side side,
