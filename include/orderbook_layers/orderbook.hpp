@@ -46,7 +46,7 @@ class SessionQuoteId {
    const std::string sessionId_;
    const std::string quoteId_;
 
-   SessionQuoteId(const std::string sessionId, const std::string_view quoteId)
+   SessionQuoteId(const std::string& sessionId, const std::string_view& quoteId)
        : sessionId_(sessionId), quoteId_(quoteId) {}
 
    bool operator==(const SessionQuoteId& other) const {
@@ -74,4 +74,10 @@ class OrderBook {
 
    void insertOrder(Order* order);
    void cancelOrder(Order* order);
+   QuoteOrders getQuotes(const std::string& session, const std::string& quoteId,
+                         std::function<QuoteOrders()> createOrders);
+   void quote(const QuoteOrders& quotes, std::uint32_t bidPrice,
+              std::uint32_t bidQuantity, std::uint32_t askPrice,
+              std::uint32_t askQuantity);
+   const Order getOrder(Order* order);
 };
